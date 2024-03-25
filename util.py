@@ -58,6 +58,40 @@ def write_csv(results, output_path):
                                                                license_number_score))
     f.close()
 
+# THESE ARE THE CHANGES FOR INDIAN LICENSE PLATE 
+# def license_complies_format(text):
+   
+#     if len(text) != 10:
+#         return False
+
+#     if (text[0] in string.ascii_uppercase or text[0] in dict_int_to_char.keys()) and \
+#        (text[1] in string.ascii_uppercase or text[1] in dict_int_to_char.keys()) and \
+#        (text[2] in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'] or text[2] in dict_char_to_int.keys()) and \
+#        (text[3] in string.ascii_uppercase or text[3] in dict_int_to_char.keys()) and\
+#        (text[4] in string.ascii_uppercase or text[4] in dict_int_to_char.keys()) and \
+#        (text[5] in string.ascii_uppercase or text[5] in dict_int_to_char.keys()) and \
+#        (text[6] in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'] or text[6] in dict_char_to_int.keys()) and \
+#        (text[7] in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'] or text[7] in dict_char_to_int.keys()) and \
+#        (text[8] in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'] or text[8] in dict_char_to_int.keys()) and \
+#        (text[9] in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'] or text[9] in dict_char_to_int.keys()):
+#         return True
+#     else:
+#         return False
+
+
+# def format_license(text):
+#     license_plate_ = ''
+#     mapping = {0: dict_int_to_char, 1: dict_int_to_char, 4: dict_int_to_char, 5: dict_int_to_char, 
+#                6: dict_char_to_int, 7:dict_char_to_int, 8:dict_char_to_int, 9:dict_char_to_int,
+#                2: dict_char_to_int, 3: dict_int_to_char}
+#     for j in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]:
+#         if text[j] in mapping[j].keys():
+#             license_plate_ += mapping[j][text[j]]
+#         else:
+#             license_plate_ += text[j]
+
+#     return license_plate_
+
 
 def license_complies_format(text):
     # """
