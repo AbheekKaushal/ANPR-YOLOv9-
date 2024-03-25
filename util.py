@@ -127,7 +127,6 @@ def get_car(license_plate, vehicle_track_ids):
     for j in range(len(vehicle_track_ids)):
         xcar1, ycar1, xcar2, ycar2, score, car_id = vehicle_track_ids[j]
         if x1 > xcar1 and y1 > ycar1 and x2 < xcar2 and y2 < ycar2:
-            print('abheek')
             car_indx = j
             foundIt = True
             break

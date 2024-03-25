@@ -48,9 +48,6 @@ while ret:
             if int(class_id) in vehicles:
                 class_name = coco_names[int(class_id)]
                 detections_.append([x1, y1, x2, y2, score])
-        print(detections_)
-        # track vehicles
-        # track_ids = mot_tracker.update(np.asarray(detections_))
 
         tracker.update(frame,np.asarray(detections_))
         for track in tracker.tracks:
@@ -58,8 +55,6 @@ while ret:
             x1, y1, x2, y2 = bbox
             track_id = track.track_id
             track_ids.append([x1, y1, x2, y2,score,track_id])
-
-        print(track_ids)
 
         # detect license plates
         license_plates = license_plate_detector(frame)[0]
