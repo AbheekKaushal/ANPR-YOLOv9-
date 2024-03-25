@@ -61,7 +61,6 @@ while ret:
 
         for license_plate in license_plates.boxes.data.tolist():
             x1, y1, x2, y2, score, class_id = license_plate
-            print(x1, y1, x2, y2, score, class_id)
             # assign license plate to car
             xcar1, ycar1, xcar2, ycar2, car_score, car_id = get_car(license_plate, track_ids)
 
