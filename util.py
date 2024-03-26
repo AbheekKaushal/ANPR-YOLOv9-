@@ -22,22 +22,22 @@ dict_int_to_char = {'0': 'O',
 
 def write_csv(results, output_path):
     with open(output_path, 'w') as f:
-        f.write('{},{},{},{},{},{},{},{},{}\n'.format('frame_nmr', 'car_id', 'class_name', 'car_bbox', 'car_score',
-                                                      'license_plate_bbox', 'license_plate_bbox_score',
-                                                      'license_number',
-                                                      'license_number_score'))
+        f.write(
+            '{},{},{},{},{},{},{},{},{}\n'.format('frame_nmr', 'car_id', 'car_bbox', 'car_score', 'car_name',
+                                                                                                  'license_plate_bbox',
+                                                  'license_plate_bbox_score',
+                                                  'license_number',
+                                                  'license_number_score'))
 
         for frame_nmr in results.keys():
             for car_id in results[frame_nmr].keys():
                 if 'car' in results[frame_nmr][car_id].keys() and \
                         'license_plate' in results[frame_nmr][car_id].keys() and \
                         'text' in results[frame_nmr][car_id]['license_plate'].keys():
-                    # Get class name
-                    class_name = results[frame_nmr][car_id]['class_name']
-
                     # Get other information
                     car_bbox = results[frame_nmr][car_id]['car']['bbox']
                     car_score = results[frame_nmr][car_id]['car']['score']
+                    car_name = results[frame_nmr][car_id]['car']['name']
                     license_plate_bbox = results[frame_nmr][car_id]['license_plate']['bbox']
                     license_plate_bbox_score = results[frame_nmr][car_id]['license_plate']['bbox_score']
                     license_number = results[frame_nmr][car_id]['license_plate']['text']
@@ -45,19 +45,19 @@ def write_csv(results, output_path):
 
                     # Write to CSV
                     f.write('{},{},{},{},{},{},{},{},{}\n'.format(frame_nmr,
-                                                               car_id,
-                                                               class_name,
-                                                               '[{} {} {} {}]'.format(
-                                                                   car_bbox[0], car_bbox[1], car_bbox[2], car_bbox[3]),
-                                                               car_score,
-                                                               '[{} {} {} {}]'.format(
-                                                                   license_plate_bbox[0], license_plate_bbox[1],
-                                                                   license_plate_bbox[2], license_plate_bbox[3]),
-                                                               license_plate_bbox_score,
-                                                               license_number,
-                                                               license_number_score))
+                                                                  car_id,
+                                                                  '[{} {} {} {}]'.format(
+                                                                      car_bbox[0], car_bbox[1], car_bbox[2],
+                                                                      car_bbox[3]),
+                                                                  car_score,
+                                                                  car_name,
+                                                                  '[{} {} {} {}]'.format(
+                                                                      license_plate_bbox[0], license_plate_bbox[1],
+                                                                      license_plate_bbox[2], license_plate_bbox[3]),
+                                                                  license_plate_bbox_score,
+                                                                  license_number,
+                                                                  license_number_score))
     f.close()
-
 
 def license_complies_format(text):
     # """
@@ -125,7 +125,7 @@ def get_car(license_plate, vehicle_track_ids):
 
     foundIt = False
     for j in range(len(vehicle_track_ids)):
-        xcar1, ycar1, xcar2, ycar2, score, car_id = vehicle_track_ids[j]
+        xcar1, ycar1, xcar2, ycar2, score, car_id, car_class_id = vehicle_track_ids[j]
         if x1 > xcar1 and y1 > ycar1 and x2 < xcar2 and y2 < ycar2:
             car_indx = j
             foundIt = True
@@ -134,4 +134,4 @@ def get_car(license_plate, vehicle_track_ids):
     if foundIt:
         return vehicle_track_ids[car_indx]
 
-    return -1, -1, -1, -1, -1, -1
+    return -1, -1, -1, -1, -1, -1, -1

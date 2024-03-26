@@ -63,11 +63,13 @@ class Track:
 
     """
 
-    def __init__(self, mean, covariance, track_id, n_init, max_age,
+    def __init__(self, mean, covariance, track_id, confidence, class_id, n_init, max_age,
                  feature=None):
         self.mean = mean
         self.covariance = covariance
         self.track_id = track_id
+        self.confidence = confidence
+        self.class_id = class_id
         self.hits = 1
         self.age = 1
         self.time_since_update = 0
@@ -108,6 +110,12 @@ class Track:
         ret = self.to_tlwh()
         ret[2:] = ret[:2] + ret[2:]
         return ret
+
+    def conf(self):
+        return self.confidence
+
+    def clid(self):
+        return self.class_id
 
     def predict(self, kf):
         """Propagate the state distribution to the current time step using a

@@ -122,7 +122,8 @@ def create_detections(detection_mat, frame_idx, min_height=0):
         bbox, confidence, feature = row[2:6], row[6], row[10:]
         if bbox[3] < min_height:
             continue
-        detection_list.append(Detection(bbox, confidence, feature))
+        print('abheek')
+        detection_list.append(Detection(bbox, confidence, 2.0, feature))
     return detection_list
 
 

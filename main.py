@@ -41,20 +41,17 @@ while ret:
         detections = coco_model(frame)[0]
         detections_ = []
         track_ids = []
-        score = 0
-        track_id=0
         for detection in detections.boxes.data.tolist():
             x1, y1, x2, y2, score, class_id = detection
             if int(class_id) in vehicles:
-                class_name = coco_names[int(class_id)]
-                detections_.append([x1, y1, x2, y2, score])
+                detections_.append([x1, y1, x2, y2, score, class_id])
 
-        tracker.update(frame,np.asarray(detections_))
+        tracker.update(frame, np.asarray(detections_))
         for track in tracker.tracks:
             bbox = track.bbox
             x1, y1, x2, y2 = bbox
             track_id = track.track_id
-            track_ids.append([x1, y1, x2, y2,score,track_id])
+            track_ids.append([x1, y1, x2, y2, track.score, track.track_id, track.class_id])
 
         # detect license plates
         license_plates = license_plate_detector(frame)[0]
@@ -62,12 +59,14 @@ while ret:
         for license_plate in license_plates.boxes.data.tolist():
             x1, y1, x2, y2, score, class_id = license_plate
             # assign license plate to car
-            xcar1, ycar1, xcar2, ycar2, car_score, car_id = get_car(license_plate, track_ids)
+            xcar1, ycar1, xcar2, ycar2, car_score, car_id, car_class_id = get_car(license_plate, track_ids)
+
+            print(get_car(license_plate, track_ids))
+
+            if(car_class_id==7):
+                print("sexxyboi")
 
             if car_id != -1:
-                if int(class_id) in vehicles:
-                    class_name = coco_names[int(class_id)]
-
                 # crop license plate
                 license_plate_crop = frame[int(y1):int(y2), int(x1): int(x2), :]
 
@@ -79,9 +78,9 @@ while ret:
                 license_plate_text, license_plate_text_score = read_license_plate(license_plate_crop_thresh)
 
                 if license_plate_text is not None:
-                    results[frame_nmr][car_id] = {'class_name': class_name,
-                                                  'car': {'bbox': [xcar1, ycar1, xcar2, ycar2],
-                                                          'score': car_score, },
+                    results[frame_nmr][car_id] = {'car': {'bbox': [xcar1, ycar1, xcar2, ycar2],
+                                                          'score': car_score,
+                                                          'name': coco_names[int(car_class_id)]},
                                                   'license_plate': {'bbox': [x1, y1, x2, y2],
                                                                     'text': license_plate_text,
                                                                     'bbox_score': score,

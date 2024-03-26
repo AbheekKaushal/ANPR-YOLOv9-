@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 
 
-def draw_border(class_name, img, top_left, bottom_right, color=(0, 255, 0), thickness=10, line_length_x=200,
+def draw_border(car_name, img, top_left, bottom_right, color=(0, 255, 0), thickness=10, line_length_x=200,
                 line_length_y=200, ):
     x1, y1 = top_left
     x2, y2 = bottom_right
@@ -21,7 +21,7 @@ def draw_border(class_name, img, top_left, bottom_right, color=(0, 255, 0), thic
 
     cv2.line(img, (x2, y2), (x2, y2 - line_length_y), color, thickness)  # -- bottom-right
     cv2.line(img, (x2, y2), (x2 - line_length_x, y2), color, thickness)
-    cv2.putText(img, class_name, (x1+200, y1-10), cv2.FONT_HERSHEY_SIMPLEX, 5, (0, 0, 0), thickness-3)
+    cv2.putText(img, car_name, (x1+200, y1-10), cv2.FONT_HERSHEY_SIMPLEX, 5, (0, 0, 0), thickness-3)
     return img
 
 
@@ -45,7 +45,7 @@ for car_id in np.unique(results['car_id']):
 
 
     car[car_id] = {
-        'name': results[(results['car_id'] == car_id) & (results['car_score'] == max_2)]['class_name'].iloc[0]}
+        'name': results[(results['car_id'] == car_id) & (results['car_score'] == max_2)]['car_name'].iloc[0]}
 
     license_plate[car_id] = {'license_crop': None,
                              'license_plate_number': results[(results['car_id'] == car_id) &

@@ -24,19 +24,20 @@ class Tracker:
 
         if len(detections) == 0:
             self.tracker.predict()
-            self.tracker.update([])  
+            self.tracker.update([])
             self.update_tracks()
             return
 
-        bboxes = np.asarray([d[:-1] for d in detections])
+        bboxes = np.asarray([d[:-2] for d in detections])
         bboxes[:, 2:] = bboxes[:, 2:] - bboxes[:, 0:2]
-        scores = [d[-1] for d in detections]
+        scores = [d[-2] for d in detections]
+        class_id = [d[-1] for d in detections]
 
         features = self.encoder(frame, bboxes)
 
         dets = []
         for bbox_id, bbox in enumerate(bboxes):
-            dets.append(Detection(bbox, scores[bbox_id], features[bbox_id]))
+            dets.append(Detection(bbox, scores[bbox_id], class_id[bbox_id], features[bbox_id]))
 
         self.tracker.predict()
         self.tracker.update(dets)
@@ -47,11 +48,13 @@ class Tracker:
         for track in self.tracker.tracks:
             if not track.is_confirmed() or track.time_since_update > 1:
                 continue
-            bbox = track.to_tlbr()
 
+            bbox = track.to_tlbr()
+            class_id = track.clid()
+            score = track.conf()
             id = track.track_id
 
-            tracks.append(Track(id, bbox))
+            tracks.append(Track(id, bbox, score, class_id))
 
         self.tracks = tracks
 
@@ -59,7 +62,11 @@ class Tracker:
 class Track:
     track_id = None
     bbox = None
+    score = None
+    class_id = None
 
-    def __init__(self, id, bbox):
+    def __init__(self, id, bbox, score, class_id):
         self.track_id = id
         self.bbox = bbox
+        self.score = score
+        self.class_id = class_id

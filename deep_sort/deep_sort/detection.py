@@ -26,9 +26,10 @@ class Detection(object):
 
     """
 
-    def __init__(self, tlwh, confidence, feature):
+    def __init__(self, tlwh, confidence, class_id, feature):
         self.tlwh = np.asarray(tlwh, dtype=np.float_)
         self.confidence = float(confidence)
+        self.class_id = int(class_id)
         self.feature = np.asarray(feature, dtype=np.float32)
 
     def to_tlbr(self):
@@ -38,6 +39,12 @@ class Detection(object):
         ret = self.tlwh.copy()
         ret[2:] += ret[:2]
         return ret
+
+    def conf(self):
+        return self.confidence
+
+    def clid(self):
+        return self.class_id
 
     def to_xyah(self):
         """Convert bounding box to format `(center x, center y, aspect ratio,
