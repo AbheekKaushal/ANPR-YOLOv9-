@@ -64,7 +64,6 @@ while ret:
             print(get_car(license_plate, track_ids))
 
             if(car_class_id==7):
-                print("sexxyboi")
 
             if car_id != -1:
                 # crop license plate
