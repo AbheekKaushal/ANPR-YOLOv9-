@@ -63,8 +63,6 @@ while ret:
 
             print(get_car(license_plate, track_ids))
 
-            if(car_class_id==7):
-
             if car_id != -1:
                 # crop license plate
                 license_plate_crop = frame[int(y1):int(y2), int(x1): int(x2), :]
