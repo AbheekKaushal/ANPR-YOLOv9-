@@ -3,7 +3,7 @@ import ast
 import cv2
 import numpy as np
 import pandas as pd
-
+import random
 
 def draw_border(car_name, img, top_left, bottom_right, color=(0, 255, 0), thickness=10, line_length_x=200,
                 line_length_y=200, ):
@@ -21,7 +21,7 @@ def draw_border(car_name, img, top_left, bottom_right, color=(0, 255, 0), thickn
 
     cv2.line(img, (x2, y2), (x2, y2 - line_length_y), color, thickness)  # -- bottom-right
     cv2.line(img, (x2, y2), (x2 - line_length_x, y2), color, thickness)
-    cv2.putText(img, car_name, (x1+200, y1-10), cv2.FONT_HERSHEY_SIMPLEX, 5, (0, 0, 0), thickness-3)
+    cv2.putText(img, car_name, (x1+200, y1+50), cv2.FONT_HERSHEY_SIMPLEX, 5, (0, 0, 0), thickness-3)
     return img
 
 
@@ -39,9 +39,13 @@ out = cv2.VideoWriter('./out.mp4', fourcc, fps, (width, height))
 
 license_plate = {}
 car = {}
+car_colors = {}
 for car_id in np.unique(results['car_id']):
     max_ = np.amax(results[results['car_id'] == car_id]['license_number_score'])
     max_2 = np.amax(results[results['car_id'] == car_id]['car_score'])
+    color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+    car_colors[car_id] = color
+
 
 
     car[car_id] = {
@@ -86,8 +90,9 @@ while ret:
             car_x1, car_y1, car_x2, car_y2 = ast.literal_eval(
                 df_.iloc[row_indx]['car_bbox'].replace('[ ', '[').replace('   ', ' ').replace('  ', ' ').replace(' ',
                                                                                                       ','))
+            color = car_colors[df_.iloc[row_indx]['car_id']]
             draw_border(car[df_.iloc[row_indx]['car_id']]['name'], frame, (int(car_x1), int(car_y1)), (int(car_x2), int(car_y2)),
-                        (0, 255, 0), 25,
+                        color, 25,
                         line_length_x=200, line_length_y=200)
 
             # draw license plate
@@ -95,7 +100,7 @@ while ret:
                 df_.iloc[row_indx]['license_plate_bbox'].replace('[ ', '[').replace('   ', ' ').replace('  ',
                                                                                                         ' ').replace(
                     ' ', ','))
-            cv2.rectangle(frame, (int(x1), int(y1)), (int(x2), int(y2)), (0, 0, 255), 12)
+            cv2.rectangle(frame, (int(x1), int(y1)), (int(x2), int(y2)), (255, 255, 255), 12)
 
             # crop license plate
             license_crop = license_plate[df_.iloc[row_indx]['car_id']]['license_crop']
