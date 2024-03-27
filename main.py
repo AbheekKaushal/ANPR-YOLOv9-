@@ -1,9 +1,6 @@
 import numpy as np
 from ultralytics import YOLO
 import cv2
-
-import util
-
 from tracker import Tracker
 from util import get_car, read_license_plate, write_csv
 
@@ -20,14 +17,12 @@ cap = cv2.VideoCapture('./sample.mp4')
 
 vehicles = [2, 3, 5, 7]
 
-############################ add dictionary
 coco_names = {
     2: "CAR",
     3: "BIKE",
     5: "BUS",
     7: "TRUCK"
 }
-#############################
 
 # read frames
 frame_nmr = -1
